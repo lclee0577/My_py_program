@@ -60,47 +60,52 @@ while (i < length):
     i += 1
 
 
+def readAssFile(Name,endcodestyle):
+        with open(Name, 'r', encoding='utf-8-sig') as f:
+            txt = f.read()
+            fontName = re.findall('fn(.*?)}', txt)
+            fontName = list(set(fontName))
+            for i in range(len(fontName)):
+                if '\\' in fontName[i]:
+                    sub_s = fontName[i].find('\\')
+                    fontName[i] = fontName[i][:sub_s]
+            fontName = list(set(fontName))
+
+            for i in range(len(fontName)):
+                if fontName[i] in My_fonts:
+                    print('find', fontName[i])
+                else:
+                    print('not find', fontName[i])
+            print("\n")    
+
+
 def findFont(fileName):
         try:
-            with open(fileName, 'r', encoding='utf-8-sig') as f:
-                txt = f.read()
-                txt2 = re.findall('fn(.*?)}', txt)
-                txt2 = list(set(txt2))
-                for i in range(len(txt2)):
-                    if '\\' in txt2[i]:
-                        sub_s = txt2[i].find('\\')
-                        txt2[i] = txt2[i][:sub_s]
-                txt2 = list(set(txt2))
-
-                for i in range(len(txt2)):
-                    if txt2[i] in My_fonts:
-                        print('find', txt2[i])
-                    else:
-                        print('not find', txt2[i])
-                print("\n")
+            readAssFile(fileName,'utf-8-sig')
 
         except UnicodeDecodeError:
-            with open(fileName, 'r', encoding='utf-16') as f:
-                txt = f.read()
-                txt2 = re.findall('fn(.*?)}', txt)
-                txt2 = list(set(txt2))
-                for i in range(len(txt2)):
-                    if '\\' in txt2[i]:
-                        sub_s = txt2[i].find('\\')
-                        txt2[i] = txt2[i][:sub_s]
-                txt2 = list(set(txt2))
+            readAssFile(fileName,'utf-16')
+            # with open(fileName, 'r', encoding='utf-16') as f:
+            #     txt = f.read()
+            #     fontName = re.findall('fn(.*?)}', txt)
+            #     fontName = list(set(fontName))
+            #     for i in range(len(fontName)):
+            #         if '\\' in fontName[i]:
+            #             sub_s = fontName[i].find('\\')
+            #             fontName[i] = fontName[i][:sub_s]
+            #     fontName = list(set(fontName))
 
-                for i in range(len(txt2)):
-                    if txt2[i] in My_fonts:
-                        print('find', txt2[i])
-                    else:
-                        print('not find', txt2[i])
+            #     for i in range(len(fontName)):
+            #         if fontName[i] in My_fonts:
+            #             print('find', fontName[i])
+            #         else:
+            #             print('not find', fontName[i])
 
-                print("\n")
+            #     print("\n")
 
 for i in range(len(assFileName)):
     print(assFileName[i])
     findFont(assFileName[i])
 
 a = input("press enter to exit")
-# print(txt2)
+# print(fontName)
