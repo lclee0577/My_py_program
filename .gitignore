@@ -8,6 +8,8 @@ __pycache__/
 
 # Personal file
 myAccount.ini
+micro_test.py
+website_data.out
 
 # Distribution / packaging
 .Python

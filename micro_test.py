@@ -1,9 +1,18 @@
 #-*- encoding:UTF-8 -*-
-import time
-import io
-import sys
-import os
+# coding:utf-8
+import configparser
 
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
-print("中文12534测试")
-print('english test')
+
+
+
+# 读取配置文件
+config = configparser.ConfigParser()
+
+
+config.read("video_data.ini")
+name = config.sections()
+print(name)
+print(len(name))
+
+for i in range(len(name)):
+    print(name[i])
