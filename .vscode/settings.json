@@ -1,4 +1,5 @@
 {
+    "editor.fontFamily": "'Microsoft YaHei Mono', 'Courier New', monospace",
     "files.autoGuessEncoding": false,
     "code-runner.executorMap": {
         "javascript": "node",
@@ -40,5 +41,7 @@
         "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
         "haskell": "runhaskell",
         "nim": "nim compile --verbosity:0 --hints:off --run"
-    }
+    },
+    "markdown.preview.fontFamily": "'Microsoft YaHei Mono'",
+
 }

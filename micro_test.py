@@ -1,6 +1,7 @@
 #-*- encoding:UTF-8 -*-
 # coding:utf-8
 import configparser
+import webbrowser
 
 
 
@@ -16,3 +17,4 @@ print(len(name))
 
 for i in range(len(name)):
     print(name[i])
+    webbrowser.open("https://www.baidu.com/s?wd="+name[i])
