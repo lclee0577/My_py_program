@@ -60,8 +60,8 @@ while (i < length):
     i += 1
 
 
-def readAssFile(Name,endcodestyle):
-        with open(Name, 'r', encoding='utf-8-sig') as f:
+def readAssFile(Name,encodestyle):
+        with open(Name, 'r', encoding= encodestyle) as f:
             txt = f.read()
             fontName = re.findall('fn(.*?)}', txt)
             fontName = list(set(fontName))
@@ -85,23 +85,7 @@ def findFont(fileName):
 
         except UnicodeDecodeError:
             readAssFile(fileName,'utf-16')
-            # with open(fileName, 'r', encoding='utf-16') as f:
-            #     txt = f.read()
-            #     fontName = re.findall('fn(.*?)}', txt)
-            #     fontName = list(set(fontName))
-            #     for i in range(len(fontName)):
-            #         if '\\' in fontName[i]:
-            #             sub_s = fontName[i].find('\\')
-            #             fontName[i] = fontName[i][:sub_s]
-            #     fontName = list(set(fontName))
 
-            #     for i in range(len(fontName)):
-            #         if fontName[i] in My_fonts:
-            #             print('find', fontName[i])
-            #         else:
-            #             print('not find', fontName[i])
-
-            #     print("\n")
 
 for i in range(len(assFileName)):
     print(assFileName[i])
