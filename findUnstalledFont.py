@@ -7,6 +7,7 @@ import time
 import io
 import sys
 import os
+import webbrowser
 
 import wx
 from wx import FontEnumerator
@@ -76,6 +77,7 @@ def readAssFile(Name,encodestyle):
                     print('find', fontName[i])
                 else:
                     print('not find', fontName[i])
+                    webbrowser.open("https://www.baidu.com/s?wd="+ fontName[i])
             print("\n")    
 
 

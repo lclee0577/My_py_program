@@ -6,7 +6,7 @@ from Email_Sender import emailsender
 import os
 import io
 import sys
-
+import webbrowser
 
 
 
@@ -29,13 +29,16 @@ while exitFlag == 1:
     name = config.sections()
     i = 0
     for i in range(len(name)):
-        result = str(refresh(config.get(name[i], 'url'), config.get(name[i], 'episode')))
+        episode = config.get(name[i], "episode")
+        url = config.get(name[i], 'url')
+        result = str(refresh(url, episode))
         if result == 'find':
-            episode = config.get(name[i], "episode")
             episode_name = ' 第 %s 集' % episode
-            emailsender(name[i], config.get(name[i], 'url'), episode_name)
+            emailsender(name[i], url, episode_name)
             config.set(name[i], "episode", '%s' % (str(int(episode) + 1)))
             config.write(open("video_data.ini", "w"))
+            webbrowser.open(url)
+            webbrowser.open('https://rarbg.to/torrents.php?search=%s+1080p' % name[i])
             print(time.ctime(), '\n')
         else:
             print("not find %s \n" %name[i])
