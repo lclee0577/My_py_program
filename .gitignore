@@ -10,6 +10,7 @@ __pycache__/
 myAccount.ini
 micro_test.py
 website_data.out
+forfun.py
 
 # Distribution / packaging
 .Python
