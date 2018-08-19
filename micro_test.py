@@ -4,17 +4,9 @@ import configparser
 import webbrowser
 
 
-
-
-# 读取配置文件
-config = configparser.ConfigParser()
-
-
-config.read("video_data.ini")
-name = config.sections()
+beninStr ='blank\">'
+stopStr = '</a></div>'
+name = '%s.*?%s' %(beninStr,stopStr)
 print(name)
-print(len(name))
 
-for i in range(len(name)):
-    print(name[i])
-    webbrowser.open("https://www.baidu.com/s?wd="+name[i])
+
