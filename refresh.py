@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 # -*- coding: utf-8 -*-
 # from Email_Sender import emailsender
 # emailsender() 输入（美剧名称，网址）便可发送到邮箱
@@ -8,12 +8,12 @@
 # print(website)
 
 import urllib.request
-
+import re
 # 定义保存函数
 
 
 def save_file(data):
-    path = "D:\\My_py_program\\website_data.out"
+    path = "D:\\My_py_program\\website_data.html"
     f = open(path, 'wb')
     f.write(data)
     f.close()
@@ -25,10 +25,22 @@ def save_file(data):
 # episode_name = '第 %s 集' %episode
 
 
-def find_string(date, episode_name):
+def find_string(date, episode):
+    episode_name = '第 %s 集' % episode
     try:
         str.index(date, episode_name)
-        return 'find'
+        subBegin = date.find(episode_name)
+        subEnd = date.find('第 %d 集' % ( int(episode)-1) )
+        date = date[subBegin:subEnd]
+        beninStr ='blank\">'
+        stopStr = '</a></div>'
+        names = re.findall('%s.*?%s' %(beninStr,stopStr), date)
+        for i in range(len(names)):
+            names[i] = re.sub(r'%s|%s' %(beninStr,stopStr),'',names[i])
+            if "1080p" in names[i]:
+                print(names[i])
+                return 'find' 
+        return 'not find'        
     except (ValueError):
         return 'not find'
 
@@ -54,8 +66,7 @@ def refresh(url, episode):
         data = res.read()
         save_file(data)
         data = data.decode('utf-8')
-        episode_name = '第 %s 集' % episode
-        result = find_string(data, episode_name)
+        result = find_string(data, episode)
         return result
     except TimeoutError:
         result = 'not find'
@@ -66,8 +77,8 @@ def refresh(url, episode):
     finally:
          return result
 
-# print(refresh('http://subhd.com/zu/14/d/26749162', '8'))
-
+print(refresh('http://subhd.com/zu/14/d/26749162', '8'))
+# refresh('http://subhd.com/zu/14/d/26749162', '8')
 # 打印爬取网页的各类信息
 # print(type(res))
 # print(res.geturl())
