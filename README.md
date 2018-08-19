@@ -1,6 +1,6 @@
-# 追剧脚本 checkEpisodeUpdate
+# **追剧脚本 checkEpisodeUpdate**
 
-    若字幕组更新字幕，则发邮件提醒美剧更新，并打开网页
+    用来检测subhd.com上关注的美剧字幕是否更新来达到追剧的目的。若字幕组更新适配1080p的字幕，则发邮件提醒美剧更新，并打开字幕下载网页和在RARBG的搜索链接
 
 ## video_data中保存着美剧字幕的网站和第几集
 
@@ -18,6 +18,7 @@
         receiveEmail1 = example@126.com
         receiveEmail2 = example@outlook.com
 
-# 检查特效字幕字体 findUninstalledFont
+# **检查特效字幕字体 findUninstalledFont**
 
-    列举特效字幕中的字体与系统中字体进行比对，若未找到则打开网页进行搜索
+    列举特效字幕.ass文件中的字体与系统中字体进行比对，若未找到则打开网页进行搜索
+    播放器: MPC-HC
