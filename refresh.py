@@ -9,6 +9,7 @@
 
 import urllib.request
 import re
+import webbrowser
 # 定义保存函数
 
 
@@ -29,18 +30,24 @@ def find_string(date, episode):
     episode_name = '第 %s 集' % episode
     try:
         str.index(date, episode_name)
+        # 寻找是否有最新一集的字幕更新，没有则抛出异常
         subBegin = date.find(episode_name)
-        subEnd = date.find('第 %d 集' % ( int(episode)-1) )
+        subEnd = date.find('第 %d 集' % (int(episode)-1))
         date = date[subBegin:subEnd]
-        beninStr ='blank\">'
+        # 选取最新一集的字幕列表
+        beninStr = '<a href='
         stopStr = '</a></div>'
-        names = re.findall('%s.*?%s' %(beninStr,stopStr), date)
-        for i in range(len(names)):
-            names[i] = re.sub(r'%s|%s' %(beninStr,stopStr),'',names[i])
+        names = re.findall('%s.*?%s' % (beninStr, stopStr), date)
+        for i in range(len(names)): 
+            # 删除起始和结束的标志
             if "1080p" in names[i]:
+                url = "http://subhd.com" + re.sub(r'%s|class.*%s|\"' % (beninStr, stopStr), '', names[i])
+                names[i] = re.sub(r'%s.*?>|%s' % (beninStr, stopStr), '', names[i])
+                webbrowser.open(url)
+                # print("http://subhd.com"+url)
                 print(names[i])
-                return 'find' 
-        return 'not find'        
+                return 'find'
+        return 'not find'
     except (ValueError):
         return 'not find'
 
@@ -64,7 +71,7 @@ def refresh(url, episode):
         res = urllib.request.urlopen(req)
 
         data = res.read()
-        save_file(data)
+        # save_file(data)
         data = data.decode('utf-8')
         result = find_string(data, episode)
         return result
