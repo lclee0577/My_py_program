@@ -1,12 +1,6 @@
 #-*- encoding:UTF-8 -*-
 # coding:utf-8
-import configparser
-import webbrowser
-
-
-beninStr ='blank\">'
-stopStr = '</a></div>'
-name = '%s.*?%s' %(beninStr,stopStr)
-print(name)
-
-
+import time
+a = time.ctime()
+timeLen=len(a)
+print("中文测试")

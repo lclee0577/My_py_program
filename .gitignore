@@ -108,3 +108,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+micro_test.py

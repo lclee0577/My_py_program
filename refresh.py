@@ -84,7 +84,7 @@ def refresh(url, episode):
     finally:
          return result
 
-print(refresh('http://subhd.com/zu/14/d/26749162', '8'))
+# print(refresh('http://subhd.com/zu/14/d/26749162', '8'))
 # refresh('http://subhd.com/zu/14/d/26749162', '8')
 # 打印爬取网页的各类信息
 # print(type(res))
