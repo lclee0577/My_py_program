@@ -48,8 +48,11 @@ def find_string(date, episode):
         for i in range(len(names)):
             # 删除起始和结束的标志
             if "1080p" in names[i]:
-                url = "http://subhd.com" + re.sub(r'%s|class.*%s|\"' % (beninStr, stopStr), '', names[i])
-                names[i] = re.sub(r'%s.*?>|%s' % (beninStr, stopStr), '', names[i])
+                url = "http://subhd.com" + \
+                    re.sub(r'%s|class.*%s|\"' %
+                           (beninStr, stopStr), '', names[i])
+                names[i] = re.sub(r'%s.*?>|%s' %
+                                  (beninStr, stopStr), '', names[i])
                 # webbrowser.open(url)
                 # print("http://subhd.com"+url)
                 print(names[i])
@@ -97,7 +100,6 @@ def refresh(url, episode):
 
 
 
-
 # 使用标准的25端口连接SMTP服务器时，使用的是明文传输，发送邮件的整个过程可能会被窃听。要更安全地发送邮件，可以加密SMTP会话，实际上就是先创建SSL安全连接，然后再使用SMTP协议发送邮件。
 # =========================================================================
 # from test import subinfo
@@ -109,6 +111,8 @@ from email.utils import parseaddr, formataddr, formatdate
 import smtplib
 
 config1 = configparser.ConfigParser()
+
+
 def emailsender(video_name, sub_url, episode_name):
     # =========================================================================
     # 设置参数
@@ -120,18 +124,17 @@ def emailsender(video_name, sub_url, episode_name):
     # 接收参数: 客户端授权密
     password = config1.get("Email", 'password')
     # 接收参数: 收件人地址,可多个
-    to_addrs = [config1.get("Email", 'receiveEmail1'),config1.get("Email", 'receiveEmail2')]
+    to_addrs = [config1.get("Email", 'receiveEmail1'),
+                config1.get("Email", 'receiveEmail2')]
     # 接收参数: SMTP服务器(注意:是发件人的smtp服务器)
     smtp_server = 'smtp.139.com'
     # 接收参数: 邮件主题
     subject = video_name+episode_name
     # 接收参数: 邮件正文
-    video_name = video_name.replace(" ","+",-1)
+    video_name = video_name.replace(" ", "+", -1)
     video_download_url = 'https://rarbg.to/torrents.php?search=%s+1080p' % video_name
     mail_msg = '<p><a href=%s' % sub_url + '>%s</a></p>' % sub_url + '\n' + \
                '<p><a href=%s' % video_download_url + '>%s</a></p>' % video_download_url
-
-
 
     def _format_addr(s):
             name, addr = parseaddr(s)
@@ -185,9 +188,8 @@ daycount = 0
 while exitFlag == 1:
 
     config.read("video_data.ini")
-   
-    print(time.ctime(), '\n')  
-    
+
+    print(time.ctime(), '\n')
 
     name = config.sections()
     i = 0
@@ -210,8 +212,8 @@ while exitFlag == 1:
     time.sleep(1800)
     if loopcount == 24:
          loopcount = 0
-         daycount +=1
-         emailsender("Mi3 have been work", "already run %d days" %daycount, " %d days" %daycount)
-    
-         #exitFlag = input("press enter to continue, 0 to exit     ")
+         daycount += 1
+         emailsender("Mi3 have been work", "already run %d days" %
+                     daycount, " %d days" % daycount)
 
+         #exitFlag = input("press enter to continue, 0 to exit     ")
