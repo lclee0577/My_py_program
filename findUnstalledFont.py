@@ -61,10 +61,14 @@ while (i < length):
     i += 1
 
 
-def readAssFile(Name,encodestyle):
-        with open(Name, 'r', encoding= encodestyle) as f:
+def readAssFile(Name, encodestyle):
+        with open(Name, 'r', encoding=encodestyle) as f:
             txt = f.read()
             fontName = re.findall('fn(.*?)}', txt)
+            styleFont = re.findall('Style: (.*?),(.*?),', txt)
+            for i in range(len(styleFont)):
+                fontName.append(styleFont[i][1])
+
             fontName = list(set(fontName))
             for i in range(len(fontName)):
                 if '\\' in fontName[i]:
@@ -78,15 +82,15 @@ def readAssFile(Name,encodestyle):
                 else:
                     print('not find', fontName[i])
                     webbrowser.open("https://www.baidu.com/s?wd="+ fontName[i])
-            print("\n")    
+            print("\n")
 
 
 def findFont(fileName):
         try:
-            readAssFile(fileName,'utf-8-sig')
+            readAssFile(fileName, 'utf-8-sig')
 
         except UnicodeDecodeError:
-            readAssFile(fileName,'utf-16')
+            readAssFile(fileName, 'utf-16')
 
 
 for i in range(len(assFileName)):
