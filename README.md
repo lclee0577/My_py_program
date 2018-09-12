@@ -5,17 +5,19 @@
 
 ##  **video_data中保存着美剧字幕的网站和第几集**
 
-    ### Example 绿箭侠
+- Example 绿箭侠
+  
         [Arrow]
         url = http://subhd.com/zu0/14/d/26952101
         episode = 24
 
 ## **myAccount中保存着Email的账户信息也可以直接填在Email_Sender中**
+   
+- Example  
 
-    ### example
         [Email]
         sendEmail = example@139.com  
-        password = 123456789
+        password  = 123456789
         receiveEmail1 = example@126.com
         receiveEmail2 = example@outlook.com
 

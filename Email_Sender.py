@@ -84,4 +84,5 @@ def emailsender(video_name, sub_url, episode_name):
         # 退出SMTP服务器
         server.quit()
 
-# emailsender('Agents of S.H.I.E.L.D.', 'http://subhd.com/zu0/14/d/27042712', '23')
+# daycount = 28
+# emailsender('Mi3 have been work','already run %d days' %daycount, ' %d days'%daycount)
