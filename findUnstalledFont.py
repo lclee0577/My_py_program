@@ -77,9 +77,9 @@ def readAssFile(Name, encodestyle):
             fontName = list(set(fontName))
 
             if 'FZLanTingHei-R-GBK' in txt:
-                txt1=txt.replace("FZLanTingHei-R-GBK","方正黑体_GBK")
+                txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
                 print('replace FZLanTingHei with 方正黑体_GBK')
-                f.seek(0, 0)  
+                f.seek(0, 0)
                 f.write(txt1)
 
             for i in range(len(fontName)):
@@ -87,7 +87,8 @@ def readAssFile(Name, encodestyle):
                     print('find', fontName[i])
                 else:
                     print('not find', fontName[i])
-                    webbrowser.open("https://www.baidu.com/s?wd="+ fontName[i])
+                    webbrowser.open(
+                        "https://www.baidu.com/s?wd=" + fontName[i])
             print("\n")
 
 
