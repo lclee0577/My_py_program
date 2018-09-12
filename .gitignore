@@ -11,6 +11,8 @@ myAccount.ini
 micro_test.py
 website_data.out
 forfun.py
+*.ass
+
 
 # Distribution / packaging
 .Python

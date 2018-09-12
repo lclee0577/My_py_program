@@ -62,7 +62,7 @@ while (i < length):
 
 
 def readAssFile(Name, encodestyle):
-        with open(Name, 'r', encoding=encodestyle) as f:
+        with open(Name, 'r+', encoding=encodestyle) as f:
             txt = f.read()
             fontName = re.findall('fn(.*?)}', txt)
             styleFont = re.findall('Style: (.*?),(.*?),', txt)
@@ -75,6 +75,12 @@ def readAssFile(Name, encodestyle):
                     sub_s = fontName[i].find('\\')
                     fontName[i] = fontName[i][:sub_s]
             fontName = list(set(fontName))
+
+            if 'FZLanTingHei-R-GBK' in txt:
+                txt1=txt.replace("FZLanTingHei-R-GBK","方正黑体_GBK")
+                print('replace FZLanTingHei with 方正黑体_GBK')
+                f.seek(0, 0)  
+                f.write(txt1)
 
             for i in range(len(fontName)):
                 if fontName[i] in My_fonts:
