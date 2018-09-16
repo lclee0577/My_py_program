@@ -35,3 +35,8 @@ while (i < length):
 for i in range(len(assFileName)):
     print(assFileName[i])
     findFont(assFileName[i])
+
+with open("Fontdict.txt", 'r+') as f:
+    txt = f.read()
+    fontlist = txt.split(',')
+    print(fontlist)

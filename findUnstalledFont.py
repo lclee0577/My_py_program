@@ -37,14 +37,30 @@ for i in range(length):
             My_fonts1.remove(My_fonts1[i])
             length = len(My_fonts1)
 
+with open("Fontdict.txt", 'a',encoding="utf-8") as f:
+    # f.seek(0, 0)
+    for i in range(len(My_fonts1)):
+        f.write(str(My_fonts1[i])+'\n')
+
 My_fonts2 = os.listdir('C:\\Windows\\Fonts')
 for i in range(len(My_fonts2)):
     if '.' in My_fonts2[i]:
         sub_s = My_fonts2[i].find('.')
         My_fonts2[i] = My_fonts2[i][:sub_s]
 
-My_fonts = list(set(My_fonts1+My_fonts2))
+with open("Fontdict.txt", 'a',encoding="utf-8") as f:
+    # f.seek(0, 0)
+    for i in range(len(My_fonts2)):
+        f.write(str(My_fonts2[i])+'\n')
+
+My_fonts1.extend(My_fonts2)
+My_fonts = list(set(My_fonts1))
 My_fonts.extend(installed_fonts)
+
+# with open("Fontdict.txt", 'a',encoding="utf-8") as f:
+#     # f.seek(0, 0)
+#     for i in range(len(My_fonts)):
+#         f.write(str(My_fonts[i])+'\n')
 
 # print(My_fonts)
 # print(os.getcwd())
