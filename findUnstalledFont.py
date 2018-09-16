@@ -26,44 +26,93 @@ installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei'
 #       '方正艺黑简体','方正兰亭特黑简体','方正兰亭特黑长简体','迷你霹雳体'
 #       ]
 
-aaa = wx.App(False)
-My_fonts1 = wx.FontEnumerator().GetFacenames()
 
+def refreshFontList():
+    aaa = wx.App(False)
+    My_fonts1 = wx.FontEnumerator().GetFacenames()
 
-length = len(My_fonts1)
-for i in range(length):
-    if i < length:
-        if '@' in My_fonts1[i]:
-            My_fonts1.remove(My_fonts1[i])
-            length = len(My_fonts1)
+    length = len(My_fonts1)
+    for i in range(length):
+        if i < length:
+            if '@' in My_fonts1[i]:
+                My_fonts1.remove(My_fonts1[i])
+                length = len(My_fonts1)
 
-with open("Fontdict.txt", 'a',encoding="utf-8") as f:
-    # f.seek(0, 0)
-    for i in range(len(My_fonts1)):
-        f.write(str(My_fonts1[i])+'\n')
-
-My_fonts2 = os.listdir('C:\\Windows\\Fonts')
-for i in range(len(My_fonts2)):
-    if '.' in My_fonts2[i]:
-        sub_s = My_fonts2[i].find('.')
-        My_fonts2[i] = My_fonts2[i][:sub_s]
-
-with open("Fontdict.txt", 'a',encoding="utf-8") as f:
-    # f.seek(0, 0)
+    My_fonts2 = os.listdir('C:\\Windows\\Fonts')
     for i in range(len(My_fonts2)):
-        f.write(str(My_fonts2[i])+'\n')
+        if '.' in My_fonts2[i]:
+            sub_s = My_fonts2[i].find('.')
+            My_fonts2[i] = My_fonts2[i][:sub_s]
 
-My_fonts1.extend(My_fonts2)
-My_fonts = list(set(My_fonts1))
-My_fonts.extend(installed_fonts)
+    My_fonts1.extend(My_fonts2)
+    My_fonts = list(set(My_fonts1))
+    My_fonts.extend(installed_fonts)
 
-# with open("Fontdict.txt", 'a',encoding="utf-8") as f:
-#     # f.seek(0, 0)
-#     for i in range(len(My_fonts)):
-#         f.write(str(My_fonts[i])+'\n')
+    with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
+        f.seek(0, 0)
+        for i in range(len(My_fonts)):
+            f.write(str(My_fonts[i])+'\n')
 
 # print(My_fonts)
 # print(os.getcwd())
+
+
+# refreshFontList()
+def readAssFile(Name, encodestyle, refreshFlag):
+        with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
+             My_fonts = f.read()
+
+        with open(Name, 'r+', encoding=encodestyle) as f:
+            txt = f.read()
+
+        fontName = re.findall('fn(.*?)}', txt)
+        styleFont = re.findall('Style: (.*?),(.*?),', txt)
+        for i in range(len(styleFont)):
+            fontName.append(styleFont[i][1])
+
+        fontName = list(set(fontName))
+        for i in range(len(fontName)):
+            if '\\' in fontName[i]:
+                sub_s = fontName[i].find('\\')
+                fontName[i] = fontName[i][:sub_s]
+        fontName = list(set(fontName))
+
+        if 'FZLanTingHei-R-GBK' in txt:
+            txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
+            print('replace FZLanTingHei with 方正黑体_GBK')
+            f.seek(0, 0)
+            f.write(txt1)
+
+        for i in range(len(fontName)):
+            if fontName[i] in My_fonts:
+                print('find', fontName[i])
+            else:
+                if refreshFlag == 'refreshed':
+                    print('not find', fontName[i])
+                    webbrowser.open(
+                        "https://www.baidu.com/s?wd=" + fontName[i])
+                else:
+                    print('need refresh')
+                    return 'need refresh'
+        print("\n")
+
+
+def findFont(fileName):
+        refreshFlag = 'not refreshed'
+        try:
+           if(readAssFile(fileName, 'utf-8-sig', refreshFlag) == 'need refresh'):
+               refreshFontList()
+               print('refreshed')
+               refreshFlag = 'refreshed'
+               readAssFile(fileName, 'utf-8-sig', refreshFlag)
+
+        except UnicodeDecodeError:
+            if(readAssFile(fileName, 'utf-16', refreshFlag) == 'need refresh'):
+               refreshFontList()
+               print('refreshed')
+               refreshFlag = 'refreshed'
+               readAssFile(fileName, 'utf-16', refreshFlag)
+
 
 assFileName = os.listdir(os.getcwd())
 length = len(assFileName)
@@ -75,45 +124,6 @@ while (i < length):
             i -= 1
             length = len(assFileName)
     i += 1
-
-
-def readAssFile(Name, encodestyle):
-        with open(Name, 'r+', encoding=encodestyle) as f:
-            txt = f.read()
-            fontName = re.findall('fn(.*?)}', txt)
-            styleFont = re.findall('Style: (.*?),(.*?),', txt)
-            for i in range(len(styleFont)):
-                fontName.append(styleFont[i][1])
-
-            fontName = list(set(fontName))
-            for i in range(len(fontName)):
-                if '\\' in fontName[i]:
-                    sub_s = fontName[i].find('\\')
-                    fontName[i] = fontName[i][:sub_s]
-            fontName = list(set(fontName))
-
-            if 'FZLanTingHei-R-GBK' in txt:
-                txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
-                print('replace FZLanTingHei with 方正黑体_GBK')
-                f.seek(0, 0)
-                f.write(txt1)
-
-            for i in range(len(fontName)):
-                if fontName[i] in My_fonts:
-                    print('find', fontName[i])
-                else:
-                    print('not find', fontName[i])
-                    webbrowser.open(
-                        "https://www.baidu.com/s?wd=" + fontName[i])
-            print("\n")
-
-
-def findFont(fileName):
-        try:
-            readAssFile(fileName, 'utf-8-sig')
-
-        except UnicodeDecodeError:
-            readAssFile(fileName, 'utf-16')
 
 
 for i in range(len(assFileName)):

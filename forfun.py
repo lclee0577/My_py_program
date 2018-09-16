@@ -36,7 +36,11 @@ for i in range(len(assFileName)):
     print(assFileName[i])
     findFont(assFileName[i])
 
-with open("Fontdict.txt", 'r+') as f:
+with open("Fontdict.txt", 'r+',encoding="utf-8") as f:
     txt = f.read()
-    fontlist = txt.split(',')
-    print(fontlist)
+    fontList = txt.split("\n")
+    fontList = list( set( txt.split("\n") ) )
+    print(fontList)
+    # f.seek(0, 0)
+    # for i in range(len(fontList)):
+    #     f.write(fontList[i]+'\n')
