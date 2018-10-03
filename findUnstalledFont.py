@@ -15,6 +15,7 @@ from wx import FontEnumerator
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 print(time.ctime())
+start = time.process_time()
 
 installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei'
                    ]
@@ -130,5 +131,7 @@ for i in range(len(assFileName)):
     print(assFileName[i])
     findFont(assFileName[i])
 
+endTime = (time.process_time() - start)
+print("Time used:",endTime)
 a = input("press enter to exit")
 # print(fontName)

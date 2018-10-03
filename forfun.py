@@ -1,46 +1,17 @@
-import io
-import sys
-import os
+
+import time
+import pyautogui
 
 
-
-def readAssFile(Name, encodestyle):
-    with open(Name, 'r+', encoding=encodestyle) as f:
-        txt = f.read()
-        if 'FZLanTingHei-R-GBK' in txt:
-            print('FZLanTingHei')
-            txt1=txt.replace("FZLanTingHei-R-GBK","方正黑体_GBK")
-            print('replace FZLanTingHei with 方正黑体_GBK')
-            f.seek(0, 0)  
-            f.write(txt1)
-
-def findFont(fileName):
-        try:
-            readAssFile(fileName, 'utf-8-sig')
-
-        except UnicodeDecodeError:
-            readAssFile(fileName, 'utf-16')
-
-assFileName = os.listdir(os.getcwd())
-length = len(assFileName)
-i = 0
-while (i < length):
-    if i < length:
-        if 'ass' not in assFileName[i]:
-            assFileName.remove(assFileName[i])
-            i -= 1
-            length = len(assFileName)
-    i += 1
-
-for i in range(len(assFileName)):
-    print(assFileName[i])
-    findFont(assFileName[i])
-
-with open("Fontdict.txt", 'r+',encoding="utf-8") as f:
-    txt = f.read()
-    fontList = txt.split("\n")
-    fontList = list( set( txt.split("\n") ) )
-    print(fontList)
-    # f.seek(0, 0)
-    # for i in range(len(fontList)):
-    #     f.write(fontList[i]+'\n')
+pyautogui.FAILSAFE = True
+loopCount = 0
+while 1:
+    print(pyautogui.position())
+    print("loop count:" + str(loopCount))
+    pyautogui.click(2601, 195)
+    time.sleep(1)
+    pyautogui.click(2601, 195)
+    for i in range(60):
+        time.sleep(1)
+        print(60 - i)
+    loopCount += 1
