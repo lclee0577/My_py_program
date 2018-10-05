@@ -14,8 +14,10 @@ import sys
 import io
 import time
 import configparser
+import random
+import platform
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
+#sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 # 定义保存函数
 
 
@@ -76,10 +78,11 @@ def refresh(url, episode):
 
     # User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
     # Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393
+    result = 'not find'
     try:
         req = urllib.request.Request(url=url, headers=headers)
 
-        res = urllib.request.urlopen(req)
+        res = urllib.request.urlopen(req, timeout=60)
 
         data = res.read()
         # save_file(data)
@@ -99,7 +102,6 @@ def refresh(url, episode):
         return result
 
 
-
 # 使用标准的25端口连接SMTP服务器时，使用的是明文传输，发送邮件的整个过程可能会被窃听。要更安全地发送邮件，可以加密SMTP会话，实际上就是先创建SSL安全连接，然后再使用SMTP协议发送邮件。
 # =========================================================================
 # from test import subinfo
@@ -113,7 +115,7 @@ import smtplib
 config1 = configparser.ConfigParser()
 
 
-def emailsender(video_name, sub_url, episode_name):
+def emailsender(video_name, sub_url, episode_name, episode):
     # =========================================================================
     # 设置参数
     # =========================================================================
@@ -132,7 +134,8 @@ def emailsender(video_name, sub_url, episode_name):
     subject = video_name+episode_name
     # 接收参数: 邮件正文
     video_name = video_name.replace(" ", "+", -1)
-    video_download_url = 'https://rarbg.to/torrents.php?search=%s+1080p' % video_name
+    video_download_url = 'https://rarbg.to/torrents.php?search=%s+E%02d+1080p' % (
+        video_name, int(episode))
     mail_msg = '<p><a href=%s' % sub_url + '>%s</a></p>' % sub_url + '\n' + \
                '<p><a href=%s' % video_download_url + '>%s</a></p>' % video_download_url
 
@@ -185,6 +188,20 @@ name = config.sections()
 loopcount = 0
 exitFlag = 1
 daycount = 0
+version ="1.0.1"
+
+sysEnvironment = platform.system()
+if sysEnvironment == "Windows":
+    sleepTime = random.randint(1, 8)
+else:
+    sleepTime = random.randint(15*60, 20*60)
+
+timeToday = time.strftime('%d', time.localtime())
+dayFlag = timeToday
+
+emailsender("%s %s have been work" % (sysEnvironment,version), "already run %d days" %
+            daycount, " %d days" % daycount, 1)
+
 while exitFlag == 1:
 
     config.read("video_data.ini")
@@ -196,24 +213,49 @@ while exitFlag == 1:
     for i in range(len(name)):
         episode = config.get(name[i], "episode")
         url = config.get(name[i], 'url')
-        result = str(refresh(url, episode))
-        if result == 'find':
-            episode_name = ' 第 %s 集 from Mi3' % episode
-            emailsender(name[i], url, episode_name)
-            config.set(name[i], "episode", '%s' % (str(int(episode) + 1)))
-            config.write(open("video_data.ini", "w"))
-            #webbrowser.open(url)
-            #webbrowser.open('https://rarbg.to/torrents.php?search=%s+1080p' % name[i])
-            print(time.ctime())
-        else:
-            print("not find %s \n" % name[i])
+        checkflag = config.get(name[i], 'checkflag')
+        if checkflag == "1":
+            print("begin refresh website")
+            result = str(refresh(url, episode))
+            print("end refresh website")
+            if result == 'find':
+                episode_name = ' 第 %s 集 from %s' % (episode, sysEnvironment)
+                print("begin send email")
+                emailsender(name[i], url, episode_name, episode)
+                config.set(name[i], "episode", '%s' % (str(int(episode) + 1)))
+                config.write(open("video_data.ini", "w"))
+                if sysEnvironment == "Windows":
+                    webbrowser.open(url)
+                    webbrowser.open(
+                        'https://rarbg.to/torrents.php?search=%s+E%02d+1080p' % (name[i], int(episode)))
+                print(time.ctime())
+            else:
+                print("not find %s \n" % name[i])
+            print("begin switch next daley")
+            time.sleep(random.randint(1, 3))
+            print("end switch next daley \n")
 
-    loopcount += 1
-    time.sleep(1800)
-    if loopcount == 24:
-         loopcount = 0
+    if sysEnvironment == "Windows":
+        sleepTime = random.randint(1, 8)
+        print("begin %ds sleep" % sleepTime)
+        time.sleep(sleepTime)
+    else:
+        sleepTime = random.randint(15, 20)
+        print("begin %d mins sleep" % (sleepTime))
+        for k in range(sleepTime):
+            for i in range(6):
+                for j in range(10):
+                    time.sleep(1)
+                #     print(i*10+j,end=" ")
+                # print(" ")
+            print(time.ctime()+" %d left" % (sleepTime-1-k))
+
+    print("end sleep \n")
+    timeToday = time.strftime('%d', time.localtime())
+    if timeToday != dayFlag:
+         dayFlag = timeToday
          daycount += 1
-         emailsender("Mi3 have been work", "already run %d days" %
-                     daycount, " %d days" % daycount)
+         emailsender("%s %s have been work" % (sysEnvironment,version), "already run %d days" %
+                     daycount, " %d days" % daycount, 1)
 
          #exitFlag = input("press enter to continue, 0 to exit     ")
