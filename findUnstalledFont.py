@@ -66,24 +66,40 @@ def readAssFile(Name, encodestyle, refreshFlag):
         with open(Name, 'r+', encoding=encodestyle) as f:
             txt = f.read()
 
+            if 'FZLanTingHei-R-GBK' in txt:
+                txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
+                print('replace FZLanTingHei with 方正黑体_GBK')
+                f.seek(0, 0)
+                f.write(txt1)
+
+            if '迷你霹雳体' in txt:
+                txt1 = txt.replace("迷你霹雳体", "迷你霹")
+                print('replace 迷你霹雳体 with 迷你霹')
+                f.seek(0, 0)
+                f.write(txt1)
+
         fontName = re.findall('fn(.*?)}', txt)
         styleFont = re.findall('Style: (.*?),(.*?),', txt)
         for i in range(len(styleFont)):
             fontName.append(styleFont[i][1])
 
         fontName = list(set(fontName))
+        
         for i in range(len(fontName)):
+            # print(fontName[i])
             if '\\' in fontName[i]:
                 sub_s = fontName[i].find('\\')
-                fontName[i] = fontName[i][:sub_s]
+                if sub_s == 0:
+                    # 为0是在中间的特效字体
+                   fontName[i] = fontName[i][3:]
+                   sub_s = fontName[i].find('\\')
+                   fontName[i] = fontName[i][:sub_s]
+                else:
+                    fontName[i] = fontName[i][:sub_s]
         fontName = list(set(fontName))
 
-        if 'FZLanTingHei-R-GBK' in txt:
-            txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
-            print('replace FZLanTingHei with 方正黑体_GBK')
-            f.seek(0, 0)
-            f.write(txt1)
 
+            
         for i in range(len(fontName)):
             if fontName[i] in My_fonts:
                 print('find', fontName[i])
