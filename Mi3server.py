@@ -199,9 +199,6 @@ else:
 timeToday = time.strftime('%d', time.localtime())
 dayFlag = timeToday
 
-emailsender("%s %s have been work" % (sysEnvironment,version), "already run %d days" %
-            daycount, " %d days" % daycount, 1)
-
 while exitFlag == 1:
 
     config.read("video_data.ini")
