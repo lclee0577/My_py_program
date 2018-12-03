@@ -17,7 +17,9 @@ from wx import FontEnumerator
 print(time.ctime())
 start = time.process_time()
 
-installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei'
+installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei',"FZHei-B01","FZZongYi-M05S","cronos Pro Subhead",\
+                    "FZYiHei-M20","FZLanTingHei-R-GBK"
+
                    ]
 
 # installed_fonts = ['微软雅黑', '方正综艺简体', '方正隶变简体', '方正小标宋简体', \
@@ -60,75 +62,92 @@ def refreshFontList():
 
 # refreshFontList()
 def readAssFile(Name, encodestyle, refreshFlag):
-        with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
-             My_fonts = f.read()
+    with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
+        My_fonts = f.read()
 
-        with open(Name, 'r+', encoding=encodestyle) as f:
-            txt = f.read()
+    with open(Name, 'r+', encoding=encodestyle) as f:
+        txt = f.read()
 
-            if 'FZLanTingHei-R-GBK' in txt:
-                txt1 = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
-                print('replace FZLanTingHei with 方正黑体_GBK')
-                f.seek(0, 0)
-                f.write(txt1)
-
-            if '迷你霹雳体' in txt:
-                txt1 = txt.replace("迷你霹雳体", "迷你霹")
-                print('replace 迷你霹雳体 with 迷你霹')
-                f.seek(0, 0)
-                f.write(txt1)
-
-        fontName = re.findall('fn(.*?)}', txt)
-        styleFont = re.findall('Style: (.*?),(.*?),', txt)
-        for i in range(len(styleFont)):
-            fontName.append(styleFont[i][1])
-
-        fontName = list(set(fontName))
+        if 'FZLanTingHei-R-GBK' in txt:
+            txt = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
+            print('replace FZLanTingHei with 方正黑体_GBK')
+            f.seek(0, 0)
+            f.write(txt)
         
-        for i in range(len(fontName)):
-            # print(fontName[i])
-            if '\\' in fontName[i]:
+        if 'cronos Pro Subhead' in txt:
+            txt = txt.replace("cronos Pro Subhead", "方正黑体_GBK")
+            print('cronos Pro Subhead with 方正黑体_GBK')
+            f.seek(0, 0)
+            f.write(txt)
+
+        if 'hwKaiTi' in txt:
+            txt = txt.replace("hwKaiTi", "方正黑体_GBK")
+            print('hwKaiTi with 方正黑体_GBK')
+            f.seek(0, 0)
+            f.write(txt)
+
+        if '迷你霹雳体' in txt:
+            txt = txt.replace("迷你霹雳体", "迷你霹")
+            print('replace 迷你霹雳体 with 迷你霹')
+            f.seek(0, 0)
+            f.write(txt)
+
+        if '微软雅黑' in txt:
+            txt = txt.replace("微软雅黑", "方正黑体_GBK")
+            print('replace 微软雅黑 with 方正黑体_GBK')
+            f.seek(0, 0)
+            f.write(txt)
+
+
+    fontName = re.findall('fn(.*?)}', txt)
+    styleFont = re.findall('Style: (.*?),(.*?),', txt)
+    for i in range(len(styleFont)):
+        fontName.append(styleFont[i][1])
+
+    fontName = list(set(fontName))
+
+    for i in range(len(fontName)):
+        # print(fontName[i])
+        if '\\' in fontName[i]:
+            sub_s = fontName[i].find('\\')
+            if sub_s == 0:
+                # 为0是在中间的特效字体
+                fontName[i] = fontName[i][3:]
                 sub_s = fontName[i].find('\\')
-                if sub_s == 0:
-                    # 为0是在中间的特效字体
-                   fontName[i] = fontName[i][3:]
-                   sub_s = fontName[i].find('\\')
-                   fontName[i] = fontName[i][:sub_s]
-                else:
-                    fontName[i] = fontName[i][:sub_s]
-        fontName = list(set(fontName))
-
-
-            
-        for i in range(len(fontName)):
-            if fontName[i] in My_fonts:
-                print('find', fontName[i])
+                fontName[i] = fontName[i][:sub_s]
             else:
-                if refreshFlag == 'refreshed':
-                    print('not find', fontName[i])
-                    webbrowser.open(
-                        "https://www.baidu.com/s?wd=" + fontName[i])
-                else:
-                    print('need refresh')
-                    return 'need refresh'
-        print("\n")
+                fontName[i] = fontName[i][:sub_s]
+    fontName = list(set(fontName))
+
+    for i in range(len(fontName)):
+        if fontName[i] in My_fonts:
+            print('find', fontName[i])
+        else:
+            if refreshFlag == 'refreshed':
+                print('not find', fontName[i])
+                webbrowser.open(
+                    "https://www.baidu.com/s?wd=" + fontName[i])
+            else:
+                print('need refresh')
+                return 'need refresh'
+    print("\n")
 
 
 def findFont(fileName):
-        refreshFlag = 'not refreshed'
-        try:
-           if(readAssFile(fileName, 'utf-8-sig', refreshFlag) == 'need refresh'):
-               refreshFontList()
-               print('refreshed')
-               refreshFlag = 'refreshed'
-               readAssFile(fileName, 'utf-8-sig', refreshFlag)
+    refreshFlag = 'not refreshed'
+    try:
+        if(readAssFile(fileName, 'utf-8-sig', refreshFlag) == 'need refresh'):
+            refreshFontList()
+            print('refreshed')
+            refreshFlag = 'refreshed'
+            readAssFile(fileName, 'utf-8-sig', refreshFlag)
 
-        except UnicodeDecodeError:
-            if(readAssFile(fileName, 'utf-16', refreshFlag) == 'need refresh'):
-               refreshFontList()
-               print('refreshed')
-               refreshFlag = 'refreshed'
-               readAssFile(fileName, 'utf-16', refreshFlag)
+    except UnicodeDecodeError:
+        if(readAssFile(fileName, 'utf-16', refreshFlag) == 'need refresh'):
+            refreshFontList()
+            print('refreshed')
+            refreshFlag = 'refreshed'
+            readAssFile(fileName, 'utf-16', refreshFlag)
 
 
 assFileName = os.listdir(os.getcwd())
@@ -136,7 +155,7 @@ length = len(assFileName)
 i = 0
 while (i < length):
     if i < length:
-        if 'ass' not in assFileName[i]:
+        if '.ass' not in assFileName[i]:
             assFileName.remove(assFileName[i])
             i -= 1
             length = len(assFileName)
@@ -145,9 +164,14 @@ while (i < length):
 
 for i in range(len(assFileName)):
     print(assFileName[i])
+    assInfo = (int) ((time.time()- os.stat(assFileName[i]).st_ctime)/60)
+    if(assInfo<60):
+        print("     created %d mins ago"%assInfo)
+    else:
+        print("     created %d hours ago"%(assInfo/60))
     findFont(assFileName[i])
 
 endTime = (time.process_time() - start)
-print("Time used:",endTime)
+print("Time used:", endTime)
 a = input("press enter to exit")
 # print(fontName)
