@@ -67,34 +67,45 @@ def readAssFile(Name, encodestyle, refreshFlag):
 
     with open(Name, 'r+', encoding=encodestyle) as f:
         txt = f.read()
-
+        changeFlag = 0
+        
         if 'FZLanTingHei-R-GBK' in txt:
             txt = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
             print('replace FZLanTingHei with 方正黑体_GBK')
-            f.seek(0, 0)
-            f.write(txt)
+            changeFlag = 1
+
         
+        if 'Arial' in txt:
+            txt = txt.replace("Arial", "方正黑体_GBK")
+            print('relaced Arial with 方正黑体_GBK')
+            changeFlag = 1
+            
         if 'cronos Pro Subhead' in txt:
             txt = txt.replace("cronos Pro Subhead", "方正黑体_GBK")
             print('cronos Pro Subhead with 方正黑体_GBK')
-            f.seek(0, 0)
-            f.write(txt)
+            changeFlag = 1
+
+        if '方正仿宋_GBK' in txt:
+            txt = txt.replace("方正仿宋_GBK", "方正黑体_GBK")
+            print('方正仿宋_GBK with 方正黑体_GBK')
+            changeFlag = 1
 
         if 'hwKaiTi' in txt:
             txt = txt.replace("hwKaiTi", "方正黑体_GBK")
             print('hwKaiTi with 方正黑体_GBK')
-            f.seek(0, 0)
-            f.write(txt)
+            changeFlag = 1
 
         if '迷你霹雳体' in txt:
             txt = txt.replace("迷你霹雳体", "迷你霹")
             print('replace 迷你霹雳体 with 迷你霹')
-            f.seek(0, 0)
-            f.write(txt)
+            changeFlag = 1
 
         if '微软雅黑' in txt:
             txt = txt.replace("微软雅黑", "方正黑体_GBK")
             print('replace 微软雅黑 with 方正黑体_GBK')
+            changeFlag = 1
+
+        if changeFlag == 1:
             f.seek(0, 0)
             f.write(txt)
 
