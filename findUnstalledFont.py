@@ -1,4 +1,4 @@
-﻿# -*- encoding:UTF-8 -*-
+﻿
 """
 This is a test for find the font in ass file
 """
@@ -18,7 +18,7 @@ print(time.ctime())
 start = time.process_time()
 
 installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei',"FZHei-B01","FZZongYi-M05S","cronos Pro Subhead",\
-                    "FZYiHei-M20","FZLanTingHei-R-GBK"
+                    "FZYiHei-M20","FZLanTingHei-R-GBK","方正黑体_GBK Light","icomoon"
 
                    ]
 
@@ -61,13 +61,45 @@ def refreshFontList():
 
 
 # refreshFontList()
+def removeUnnecessary(alltxt):
+        txt = alltxt.split("\n")
+        removeFlag = 0
+        for i in range(len(txt)-1,-1,-1):
+                if("擦枪通用二" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif("片头名单" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif("看最新热播美剧" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif("扫描即刻下载" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif("pos(339.6,200)}■" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif("pos(298.876,203.83)}■" in txt[i]):
+                        del txt[i]
+                        removeFlag = 1
+                elif(len(txt[i])>500):
+                    if(removeFlag == 1):
+                        del txt[i]
+        if(removeFlag == 1):
+            print("      擦枪字幕")
+        return txt
+
+
+
+
 def readAssFile(Name, encodestyle, refreshFlag):
     with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
         My_fonts = f.read()
 
+    changeFlag = 0
     with open(Name, 'r+', encoding=encodestyle) as f:
         txt = f.read()
-        changeFlag = 0
         
         if 'FZLanTingHei-R-GBK' in txt:
             txt = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
@@ -105,9 +137,14 @@ def readAssFile(Name, encodestyle, refreshFlag):
             print('replace 微软雅黑 with 方正黑体_GBK')
             changeFlag = 1
 
-        if changeFlag == 1:
+        txtLines = removeUnnecessary(txt)
+        
+    if changeFlag == 1:
+        with open(Name, 'w', encoding=encodestyle) as f:
             f.seek(0, 0)
-            f.write(txt)
+            for i in range(len(txtLines)):
+                    f.write(txtLines[i])
+                    f.write("\n")
 
 
     fontName = re.findall('fn(.*?)}', txt)
