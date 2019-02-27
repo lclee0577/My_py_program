@@ -61,7 +61,31 @@ def refreshFontList():
 
 
 # refreshFontList()
+
+
+deleteDict={
+        "FZLanTingHei-R-GBK":"方正黑体_GBK",
+        "微软雅黑":"方正黑体_GBK",
+        'cronos Pro Subhead':"方正黑体_GBK",
+        'Arial':"方正黑体_GBK",
+        '方正仿宋_GBK':"方正黑体_GBK",
+        'hwKaiTi':"方正黑体_GBK",
+        "迷你霹雳体":"迷你霹"
+}
+changeFlag = 0
+def relaceFont(txt1):
+        deleteName = list(deleteDict.keys())
+        relaceName = list(deleteDict.values())
+        for i in range(len(deleteName)):
+                if(deleteName[i] in txt1):
+                        txt = txt1.replace(deleteName[i], relaceName[i])
+                        txt1 = txt[:]
+                        print('replace %s with %s'%(deleteName[i],relaceName[i]))    
+                        changeFlag = 1
+        return txt1,changeFlag
+
 def removeUnnecessary(alltxt):
+        """删除射手多余字幕"""
         txt = alltxt.split("\n")
         removeFlag = 0
         for i in range(len(txt)-1,-1,-1):
@@ -97,45 +121,46 @@ def readAssFile(Name, encodestyle, refreshFlag):
     with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
         My_fonts = f.read()
 
-    changeFlag = 0
+    
     with open(Name, 'r+', encoding=encodestyle) as f:
         txt = f.read()
         
-        if 'FZLanTingHei-R-GBK' in txt:
-            txt = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
-            print('replace FZLanTingHei with 方正黑体_GBK')
-            changeFlag = 1
+        txt ,changeFlag = relaceFont(txt)
+        # if 'FZLanTingHei-R-GBK' in txt:
+        #     txt = txt.replace("FZLanTingHei-R-GBK", "方正黑体_GBK")
+        #     print('replace FZLanTingHei with 方正黑体_GBK')
+        #     changeFlag = 1
 
         
-        if 'Arial' in txt:
-            txt = txt.replace("Arial", "方正黑体_GBK")
-            print('relaced Arial with 方正黑体_GBK')
-            changeFlag = 1
+        # if 'Arial' in txt:
+        #     txt = txt.replace("Arial", "方正黑体_GBK")
+        #     print('relaced Arial with 方正黑体_GBK')
+        #     changeFlag = 1
             
-        if 'cronos Pro Subhead' in txt:
-            txt = txt.replace("cronos Pro Subhead", "方正黑体_GBK")
-            print('cronos Pro Subhead with 方正黑体_GBK')
-            changeFlag = 1
+        # if 'cronos Pro Subhead' in txt:
+        #     txt = txt.replace("cronos Pro Subhead", "方正黑体_GBK")
+        #     print('cronos Pro Subhead with 方正黑体_GBK')
+        #     changeFlag = 1
 
-        if '方正仿宋_GBK' in txt:
-            txt = txt.replace("方正仿宋_GBK", "方正黑体_GBK")
-            print('方正仿宋_GBK with 方正黑体_GBK')
-            changeFlag = 1
+        # if '方正仿宋_GBK' in txt:
+        #     txt = txt.replace("方正仿宋_GBK", "方正黑体_GBK")
+        #     print('方正仿宋_GBK with 方正黑体_GBK')
+        #     changeFlag = 1
 
-        if 'hwKaiTi' in txt:
-            txt = txt.replace("hwKaiTi", "方正黑体_GBK")
-            print('hwKaiTi with 方正黑体_GBK')
-            changeFlag = 1
+        # if 'hwKaiTi' in txt:
+        #     txt = txt.replace("hwKaiTi", "方正黑体_GBK")
+        #     print('hwKaiTi with 方正黑体_GBK')
+        #     changeFlag = 1
 
-        if '迷你霹雳体' in txt:
-            txt = txt.replace("迷你霹雳体", "迷你霹")
-            print('replace 迷你霹雳体 with 迷你霹')
-            changeFlag = 1
+        # if '迷你霹雳体' in txt:
+        #     txt = txt.replace("迷你霹雳体", "迷你霹")
+        #     print('replace 迷你霹雳体 with 迷你霹')
+        #     changeFlag = 1
 
-        if '微软雅黑' in txt:
-            txt = txt.replace("微软雅黑", "方正黑体_GBK")
-            print('replace 微软雅黑 with 方正黑体_GBK')
-            changeFlag = 1
+        # if '微软雅黑' in txt:
+        #     txt = txt.replace("微软雅黑", "方正黑体_GBK")
+        #     print('replace 微软雅黑 with 方正黑体_GBK')
+        #     changeFlag = 1
 
         txtLines = removeUnnecessary(txt)
         
@@ -145,7 +170,7 @@ def readAssFile(Name, encodestyle, refreshFlag):
             for i in range(len(txtLines)):
                     f.write(txtLines[i])
                     f.write("\n")
-
+            print("rewrite")                
 
     fontName = re.findall('fn(.*?)}', txt)
     styleFont = re.findall('Style: (.*?),(.*?),', txt)
@@ -197,19 +222,13 @@ def findFont(fileName):
             refreshFlag = 'refreshed'
             readAssFile(fileName, 'utf-16', refreshFlag)
 
-
+# 挑选字幕文件
 assFileName = os.listdir(os.getcwd())
-length = len(assFileName)
-i = 0
-while (i < length):
-    if i < length:
-        if '.ass' not in assFileName[i]:
-            assFileName.remove(assFileName[i])
-            i -= 1
-            length = len(assFileName)
-    i += 1
+for i in range(len(assFileName)-1,-1,-1):
+    if ".ass" not in assFileName[i]:
+        assFileName.remove(assFileName[i])
 
-
+# 输出文件信息
 for i in range(len(assFileName)):
     print(assFileName[i])
     assInfo = (int) ((time.time()- os.stat(assFileName[i]).st_ctime)/60)
