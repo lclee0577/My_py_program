@@ -15,7 +15,6 @@ from wx import FontEnumerator
 
 installed_fonts = ['FZZhunYuan-M02',  'Microsoft YaHei', "FZHei-B01", "FZZongYi-M05S", "cronos Pro Subhead",
                    "FZYiHei-M20", "FZLanTingHei-R-GBK", "方正黑体_GBK Light", "icomoon"
-
                    ]
 
 
@@ -23,12 +22,9 @@ def refreshFontList():
     aaa = wx.App(False)
     My_fonts1 = wx.FontEnumerator().GetFacenames()
 
-    length = len(My_fonts1)
-    for i in range(length):
-        if i < length:
+    for i in range(len(My_fonts1)-1,-1,-1):
             if '@' in My_fonts1[i]:
                 My_fonts1.remove(My_fonts1[i])
-                length = len(My_fonts1)
 
     My_fonts2 = os.listdir('C:\\Windows\\Fonts')
     for i in range(len(My_fonts2)):
@@ -45,12 +41,6 @@ def refreshFontList():
         for i in range(len(My_fonts)):
             f.write(str(My_fonts[i])+'\n')
 
-# print(My_fonts)
-# print(os.getcwd())
-
-
-# refreshFontList()
-
 
 deleteDict = {
     "FZLanTingHei-R-GBK": "方正黑体_GBK",
@@ -64,49 +54,52 @@ deleteDict = {
 
 
 def relaceFont(txt1, changeFlag):
-        deleteName = list(deleteDict.keys())
-        relaceName = list(deleteDict.values())
-        for i in range(len(deleteName)):
-                if(deleteName[i] in txt1):
-                        txt = txt1.replace(deleteName[i], relaceName[i])
-                        txt1 = txt[:]
-                        print('replace %s with %s' %
-                              (deleteName[i], relaceName[i]))
-                        changeFlag = 1
-        return txt1, changeFlag
+    deleteName = list(deleteDict.keys())
+    relaceName = list(deleteDict.values())
+    for i in range(len(deleteName)):
+        if(deleteName[i] in txt1):
+            txt = txt1.replace(deleteName[i], relaceName[i])
+            txt1 = txt[:]
+            print('replace %s with %s' %
+                  (deleteName[i], relaceName[i]))
+            changeFlag = 1
+    return txt1, changeFlag
 
 
 def removeUnnecessary(alltxt):
-        """删除射手多余字幕"""
-        txt = alltxt.split("\n")
-        removeFlag = 0
-        for i in range(len(txt)-1, -1, -1):
-                if("擦枪通用二" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif("片头名单" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif("看最新热播美剧" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif("扫描即刻下载" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif("pos(339.6,200)}■" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif("pos(298.876,203.83)}■" in txt[i]):
-                        del txt[i]
-                        removeFlag = 1
-                elif(len(txt[i]) > 500):
-                    if(removeFlag == 1):
-                        del txt[i]
-        if(removeFlag == 1):
-            print("      擦枪字幕")
-        return txt
+    """删除射手多余字幕"""
+    txt = alltxt.split("\n")
+    removeFlag = 0
+    for i in range(len(txt)-1, -1, -1):
+        if("擦枪通用二" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif("片头名单" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif("看最新热播美剧" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif("扫描即刻下载" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif("pos(339.6,200)}■" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif("pos(298.876,203.83)}■" in txt[i]):
+            del txt[i]
+            removeFlag = 1
+        elif(len(txt[i]) > 500):
+            if(removeFlag == 1):
+                del txt[i]
+    if(removeFlag == 1):
+        print("      擦枪字幕")
+    return txt
+
 
 browserLabel = []
+
+
 def readAssFile(Name, encodestyle, refreshFlag):
     with open("Fontdict.txt", 'r+', encoding="utf-8") as f:
         My_fonts = f.read()
@@ -119,13 +112,13 @@ def readAssFile(Name, encodestyle, refreshFlag):
         # 删除射手字幕广告
         txtLines = removeUnnecessary(txt)
 
-    #重新写入文件
+    # 重新写入文件
     if changeFlag == 1:
         with open(Name, 'w', encoding=encodestyle) as f:
             f.seek(0, 0)
             for i in range(len(txtLines)):
-                    f.write(txtLines[i])
-                    f.write("\n")
+                f.write(txtLines[i])
+                f.write("\n")
             print("rewrite")
 
     # 查找字体
@@ -158,7 +151,8 @@ def readAssFile(Name, encodestyle, refreshFlag):
                     # 无需重复打开同一个字体的搜索链接
                     browserLabel.append(fontName[i])
                     print('not find', fontName[i])
-                    webAddress = "http://www.zitixiazai.org/plug/search.asp?key={}&x=17&y=12".format(fontName[i])
+                    webAddress = "http://www.zitixiazai.org/plug/search.asp?key={}&x=17&y=12".format(
+                        fontName[i])
                     webbrowser.open(webAddress)
             else:
                 print('need refresh')
@@ -168,6 +162,7 @@ def readAssFile(Name, encodestyle, refreshFlag):
 
 def findFont(fileName):
     refreshFlag = 'not refreshed'
+    # 使用不同的解码方式打开
     try:
         if(readAssFile(fileName, 'utf-8-sig', refreshFlag) == 'need refresh'):
             refreshFontList()
@@ -184,28 +179,27 @@ def findFont(fileName):
 
 
 if __name__ == '__main__':
-        print(time.ctime())
-        start = time.process_time()
+    print(time.ctime())
+    start = time.process_time()
 
-        # 挑选字幕文件
-        assFileName = os.listdir(os.getcwd())
-        for i in range(len(assFileName)-1, -1, -1):
-            if ".ass" not in assFileName[i]:
-                assFileName.remove(assFileName[i])
+    # 挑选字幕文件
+    assFileName = os.listdir(os.getcwd())
+    for i in range(len(assFileName)-1, -1, -1):
+        if ".ass" not in assFileName[i]:
+            assFileName.remove(assFileName[i])
 
-        # 输出文件信息
-        for i in range(len(assFileName)):
-            print(assFileName[i])
-            assInfo = (int)(
-                (time.time() - os.stat(assFileName[i]).st_ctime)/60)
-            if(assInfo < 60):
-                print("     created %d mins ago" % assInfo)
-            else:
-                print("     created %d hours ago" % (assInfo/60))
-            findFont(assFileName[i])
+    # 输出文件信息
+    for i in range(len(assFileName)):
+        print(assFileName[i])
+        assInfo = (int)(
+            (time.time() - os.stat(assFileName[i]).st_ctime)/60)
+        if(assInfo < 60):
+            print("     created %d mins ago" % assInfo)
+        else:
+            print("     created %d hours ago" % (assInfo/60))
+        findFont(assFileName[i])
 
-        endTime = (time.process_time() - start)
-        print("Time used:", endTime)
-        time.sleep(0.5)
-
-# print(fontName)
+    # end 结束输出程序时间
+    endTime = (time.process_time() - start)
+    print("Time used:", endTime)
+    time.sleep(0.5)
