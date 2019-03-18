@@ -22,10 +22,14 @@
         receiveEmail2 = example@outlook.com
 
 # **检查特效字幕字体 findUninstalledFont**
-
+    需要wxpython
+    删除部分遮挡
     列举特效字幕.ass文件中没有定义在style里的字体
     与系统中字体进行比对，若未找到则打开网页进行搜索
 
+# **闲置手机小米3上部署追剧 Mi3Server**
+    linux deploy 在小米3上安装 ububtu 并运行
+    
 # **运行环境**
 
 - Windows10 Version 1803
