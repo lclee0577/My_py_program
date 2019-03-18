@@ -69,31 +69,38 @@ def relaceFont(txt1, changeFlag):
 def removeUnnecessary(alltxt):
     """删除射手多余字幕"""
     txt = alltxt.split("\n")
-    removeFlag = 0
+    caqiangFlag = 0
+    adFlag = 0
     for i in range(len(txt)-1, -1, -1):
         if("擦枪通用二" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1
         elif("片头名单" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1
         elif("看最新热播美剧" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1
         elif("扫描即刻下载" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1
         elif("pos(339.6,200)}■" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1
         elif("pos(298.876,203.83)}■" in txt[i]):
             del txt[i]
-            removeFlag = 1
+            caqiangFlag = 1    
         elif(len(txt[i]) > 500):
-            if(removeFlag == 1):
+            if(caqiangFlag == 1):
                 del txt[i]
-    if(removeFlag == 1):
+        elif("品牌广告推广合作  普罗米修斯" in txt[i]):
+            del txt[i]
+            adFlag = 1    
+
+    if(caqiangFlag == 1):
         print("      擦枪字幕")
+    if(adFlag == 1):
+        print("      删除 普罗 广告")
     return txt
 
 
