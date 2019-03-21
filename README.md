@@ -29,7 +29,12 @@
 
 # **闲置手机小米3上部署追剧 Mi3Server**
     linux deploy 在小米3上安装 ububtu 并运行
-    
+
+ # **对同级目录下的bt文件增加tracker 提高种子下载速度**
+    更新今日最佳的20个tracker列表 加入到种子中
+    需要安装   `torrent_parser` `wget`
+
+
 # **运行环境**
 
 - Windows10 Version 1803
