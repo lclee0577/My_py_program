@@ -7,10 +7,13 @@ import copy
 
 
 def updataTrackList():
-    modifyTime = (time.time() - os.stat("trackers_best.txt").st_mtime)
-    if(modifyTime>(24*60*60)):
-        if(os.path.exists("trackers_best.txt")):
+    
+    
+    if(os.path.exists("trackers_best.txt")):
+            modifyTime = (time.time() - os.stat("trackers_best.txt").st_mtime)
+            if(modifyTime>(24*60*60)):
                 os.unlink("trackers_best.txt")
+    else:
         filename = wget.download("https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt") 
         print("refresh tracker list")   
 
